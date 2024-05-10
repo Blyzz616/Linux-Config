@@ -2,6 +2,16 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 # nanorc
 
+```
+echo -e "set linenumbers\nset constantshow" > ~/.nanorc
+```
+
 # .bash_profile
 
+[Link](https://github.com/Blyzz616/.bash_profile)
+
 # .bashrc
+
+```
+echo -e "alias ll='ls -l'\nalias la='ls -la'\nalias lh='ls -lah'" >> ~/.bashrc
+```
