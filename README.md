@@ -3,7 +3,7 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 # nanorc
 
 ```
-echo -e "set linenumbers\nset constantshow" > ~/.nanorc
+echo -e "set constantshow\nset linenumbers\nset numbercolor cyan,black" > ~/.nanorc
 ```
 
 # .bash_profile
