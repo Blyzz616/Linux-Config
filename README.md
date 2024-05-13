@@ -13,5 +13,5 @@ echo -e "set constantshow\nset linenumbers\nset numbercolor cyan,black" > ~/.nan
 # .bashrc
 
 ```
-echo -e "alias ll='ls -l'\nalias la='ls -la'\nalias lh='ls -lah'\nexport PS4='$LINENO: '" >> ~/.bashrc
+echo -e "alias ll='ls -l'\nalias la='ls -la'\nalias lh='ls -lah'\nalias cd..='cd ..'\n\nexport PS4='$LINENO: '" >> ~/.bashrc
 ```
