@@ -1,16 +1,45 @@
 I guess I just got tired of re-configuring my linux distros each time I installed a new one from scratch.
 
-# nanorc
+## nanorc
 
 ```
 echo -e "set constantshow\nset linenumbers\nset numbercolor cyan,black" > ~/.nanorc
 ```
 
-# .bash_profile
+## .bash_profile
 
 [Link](https://github.com/Blyzz616/.bash_profile)
 
-# .bashrc
+## .screenrc
+
+> hardstatus on
+
+- Turn on the hardstatus line
+
+> hardstatus alwaysfirstline
+
+- Place the hardstatus line at the top of the screen
+
+> hardstatus string '%{= wk}Screen: %S %= [%c]'
+
+- Customize the hardstatus line format
+- %{= wk}    - Set text to white on black background
+- Screen: %S - Display "Screen: " followed by the session name (%S)
+- %=         - Push everything after this to the far right
+- [%c]       - Display current time in HH:MM format, surrounded by square brackets
+
+> defscrollback 10000
+- Set the scrollback buffer size to 10000 lines
+
+> defutf8 on
+
+- Enable UTF-8 support
+
+> startup_message off
+
+- Disable the startup message when screen starts
+
+## .bashrc
 
 ### Interactive Shell Check
 
