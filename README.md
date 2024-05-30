@@ -14,10 +14,6 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 - Set the color of the line numbers to cyan text on a black background
 
-## .bash_profile
-
-[Link](https://github.com/Blyzz616/.bash_profile)
-
 ## .screenrc
 
 > hardstatus on
@@ -207,3 +203,7 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 > fi  
 
 - If the shell is not in POSIX mode, checks for bash_completion files and sources them to enable programmable completion features.
+
+## .bash_profile
+
+[Link](https://github.com/Blyzz616/.bash_profile)
