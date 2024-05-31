@@ -212,7 +212,6 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 ### COPY PASTA
 
 ```
-#! /bin/bash 
 cat <<"EOF" > ~/.bashrc
 case $- in
     *i*) ;;
