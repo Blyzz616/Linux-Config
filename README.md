@@ -1,5 +1,5 @@
 I guess I just got tired of re-configuring my linux distros each time I installed a new one from scratch.   
-[(copy and paste code below)](Linux-Config/)
+[(copy and paste code below)]([Linux-Config/](https://github.com/Blyzz616/Linux-Config/blob/main/README.md#copy-pasta))
 
 ## .nanorc
 
