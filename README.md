@@ -289,7 +289,7 @@ set linenumbers
 set numbercolor cyan,black
 EOF
 
-[[ $(dpkg-query -l | grep screen | tail-n1 | awk '{print $1}') != "ii" ]] && sudo apt install -y screen
+[[ $(dpkg-query -l | grep screen | tail -n1 | awk '{print $1}') != "ii" ]] && sudo apt install -y screen
 
 cat <<"EOF" >  ~/.screenrc
 hardstatus on
