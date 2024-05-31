@@ -212,7 +212,9 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 ### COPY PASTA
 
 ```
-echo -e"case $- in
+#! /bin/bash 
+cat <<"EOF" > ~/.bashrc
+case $- in
     *i*) ;;
       *) return;;
 esac
@@ -279,15 +281,23 @@ if ! shopt -oq posix; then
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   fi
-fi" > ~/.bashrc
-echo -e"set constantshow
+fi
+EOF
+
+cat <<"EOF" > ~/.nanorc
+set constantshow
 set linenumbers
-set numbercolor cyan,black" > ~/.nanorc
-[[ $(dpkg-query -l | grep screen | awk '{print $1}') -ne "ii" ]] && sudo apt install -y screen
-echo -e"hardstatus on
+set numbercolor cyan,black
+EOF
+
+[[ $(dpkg-query -l | grep screen | awk '{print $1}') != "ii" ]] && sudo apt install -y screen
+
+cat <<"EOF" >  ~/.screenrc
+hardstatus on
 hardstatus alwaysfirstline
 hardstatus string '%{= wk}Screen: %S %= [%c]'
 defscrollback 10000
 defutf8 on
-startup_message off" > ~/.screenrc
+startup_message off
+EOF
 ```
