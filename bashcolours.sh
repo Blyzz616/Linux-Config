@@ -23,7 +23,7 @@ echo -e "\t\e[29m29:  Strikeout\e[0m\t\t\t\\\e[29m"
 echo
 echo -e "\e[32;1mForeground (text);"
 echo -e "\t\e[39m39:  Default\e[0m\t\t\t\\\e[39m"
-echo -e "\t\e[30;107m30:  Black\e[0m\t\t\t\\\e[30m (inverted in demo)"
+echo -e "\t\e[30;107m30:  Black\e[0m \u2190 inverted \t\t\\\e[30m"
 echo -e "\t\e[31m31:  Red\e[0m\t\t\t\\\e[31m"
 echo -e "\t\e[32m32:  Green\e[0m\t\t\t\\\e[32m"
 echo -e "\t\e[33m33:  Yellow\e[0m\t\t\t\\\e[33m"
