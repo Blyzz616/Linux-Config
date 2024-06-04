@@ -289,7 +289,19 @@ set linenumbers
 set numbercolor cyan,black
 EOF
 
-[[ $(dpkg-query -l | grep screen | tail -n1 | awk '{print $1}') != "ii" ]] && sudo apt install -y screen
+ID=$(cat /etc/os-release | grep -E '^ID')
+
+if [[ $(echo $ID | grep -ciE 'rocky|rhel|centos') -gt 0 ]]; then
+  if [[ $(rpm -qa |grep -c screen- ) -eq 0 ]];then
+    sudo dnf install epel-release && sudo dnf install screen
+  fi
+elif [[ $(echo $ID | grep -ciE 'debian') -gt 0 ]]; then
+  if [[ $(dpkg-query -l | grep screen | tail -n1 | awk '{print $1}') != "ii" ]];then
+    sudo apt install -y screen
+  fi
+else
+  echo "Not Debian or Centos"
+fi
 
 cat <<"EOF" >  ~/.screenrc
 hardstatus on
