@@ -288,5 +288,3 @@ set constantshow
 set linenumbers
 set numbercolor cyan,black
 EOF
-
-.~/.bashrc
