@@ -23,9 +23,9 @@ if [ -n "$force_color_prompt" ]; then
 fi
 if [ "$color_prompt" = yes ]; then
     if [ "$(id -u)" -eq 0 ]; then
-        PS1='${debian_chroot:+($debian_chroot)}\[\e[5;31m\]\u\[\e[25;1;31m\]@\h\[\e[00m\]:\[\e[01;34m\]\w #\[\e[00m\] '
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[5;31m\]\u\e[25m@\h\[\033[00m\]:\[\033[01;34m\]\w #\[\033[00m\] '
     else
-        PS1='${debian_chroot:+($debian_chroot)}\[\e[01;32m\]\u@\h\[\e[00m\]:\[\e[01;34m\]\w \$\[\e[00m\] '
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
     fi
 else
     if [ "$(id -u)" -eq 0 ]; then
@@ -43,7 +43,11 @@ xterm*|rxvt*)
     ;;
 esac
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    if test -r ~/.dircolors; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
     alias ls='ls --color=auto'
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -52,6 +56,26 @@ fi
 diffy() {
     diff -y -B <(grep -vE '^\s*#' "$1") <(grep -vE '^\s*#' "$2")
 }
+catta() {
+    if [[ -n "$1" ]]; then
+        for texts in $(file "$1"* | grep text | awk '{print $1}' | sed 's/.$//'); do
+            echo -e "
+
+    \e[4m\e[93m${texts}\e[0m
+"
+            cat "${texts}"
+       done
+    else
+        for texts in $(file ./* | grep text | awk '{print $1}' | sed 's/.$//'); do
+            echo -e "
+
+    \e[4m\e[93m${texts}\e[0m
+"
+           cat "$texts"
+       done
+    fi
+}
+
 alias ll='ls -l'
 alias la='ls -la'
 alias lh='ls -lah'
