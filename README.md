@@ -234,6 +234,7 @@ catta() {
 
 ### COPY PASTA
 
+```
 cat <<"EOF" > ~/.bashrc
 case $- in
     *i*) ;;
@@ -329,3 +330,4 @@ set constantshow
 set linenumbers
 set numbercolor cyan,black
 EOF
+```
