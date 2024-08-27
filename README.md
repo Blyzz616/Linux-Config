@@ -176,7 +176,7 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 - Defines the diffy function to compare two files, ignoring lines that start with a comment (#) or are empty.
 
-### Define catta Function
+### Define catta Function (sorry about the non-standard formatting - github was giving me grief)
 
 ```
 catta() {  
