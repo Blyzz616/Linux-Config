@@ -179,7 +179,7 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 ### Define catta Function
 
 > catta() {  
->     if [[ -n "$1" ]]; then  
+>     if [[ -n "$1" ]]; then
 >         for texts in $(file "$1"* | grep text | awk '{print $1}' | sed 's/.$//'); do  
 >             echo -e "\n\n\e[4m\e[93m${texts}\e[0m\n"  
 >             cat "${texts}"  
