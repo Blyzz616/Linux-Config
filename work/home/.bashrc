@@ -76,7 +76,7 @@ alias la='ls -la'
 alias lh='ls -lah'
 alias cd..='cd ..'
 alias status="/usr/local/bin/status/scrape.sh"
-alias domain="/usr/local/bin/domain/check.sh"
+alias domain="/usr/local/bin/domain/init.sh"
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
