@@ -1,5 +1,8 @@
 #!/bin/bash
-#version=0.1
+
+CURRENT=0.1
+LATEST=$(curl -s https://raw.githubusercontent.com/Blyzz616/Linux-Config/main/work/usr/local/bin/domain/check.sh | sed -n '10p')
+
 
 INPUT="$@"
 #echo "INPUT: $@"
