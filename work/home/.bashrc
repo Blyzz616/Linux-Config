@@ -75,7 +75,7 @@ alias ll='ls -l'
 alias la='ls -la'
 alias lh='ls -lah'
 alias cd..='cd ..'
-alias status="/usr/local/bin/status/scrape.sh"
+alias status="/usr/local/bin/status/init.sh"
 alias domain="/usr/local/bin/domain/init.sh"
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -89,5 +89,5 @@ if ! shopt -oq posix; then
 fi
 
 if [[ -t 1 ]]; then  # Only if interactive shell
-    /usr/local/bin/status/scrape.sh
+    /usr/local/bin/status/init.sh
 fi
