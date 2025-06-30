@@ -3,8 +3,8 @@
 INPUT="$*"
 [[ -z $1 ]] && echo -e "\n  Usage: domain [OPTION]...\n  Where: [OPTION] is a domain name - example: blyzz.com\nExample: domain blyzz.com\n" && exit 1
 
-# Strip angle brackets if present
-if [[ "$INPUT" =~ \<([^>]+)\> ]]; then
+# Strip brackets if present
+if [[ "$INPUT" =~ [\<\[]([^>\]]+)[\>\]] ]]; then
     INPUT="${BASH_REMATCH[1]}"
 fi
 
