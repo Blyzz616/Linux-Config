@@ -59,10 +59,18 @@ mkdir -p "$DPATH"
 
 wget -q -O "$DPATH/$DOMAIN.whois" "https://www.whois.com/whois/$DOMAIN"
 
-date > "$DPATH/$DOMAIN.out"
-echo "Domain: ${DNAME}[.]${DTLD}" >> "$DPATH/${DOMAIN}.out"
+#date > "$DPATH/$DOMAIN.out"
+if [[ "$DNAME" == *"[" ]]; then
+  DNAME=$(echo $DNAME | rev | cut -c2- | rev)
+fi
+if [[ "$DTLD" == "]"* ]]; then
+  DTLD=$(echo $DTLD | cut -c2-)
+fi
+
+echo "Domain: ${DNAME}""[.]""${DTLD}" >> "$DPATH/${DOMAIN}.out"
 
 NS=$(dig "${DNAME}.${DTLD}" NS | grep -E '\sNS\s' | awk '{print "  " $NF}' | sed 's/.$//')
+MX=$(dig "${DNAME}.${DTLD}" MX | grep -E '\sMX\s' | awk '{print "  " $NF}' | sed 's/.$//')
 {
   grep -Eo 'Registered On.{39}' "$DPATH/$DOMAIN.whois" | sed 's/<\/div><div class="df-value">/ /'
   grep -Eo 'Updated On.{39}' "$DPATH/$DOMAIN.whois" | sed 's/<\/div><div class="df-value">/ /'
@@ -75,6 +83,7 @@ NS=$(dig "${DNAME}.${DTLD}" NS | grep -E '\sNS\s' | awk '{print "  " $NF}' | sed
     | sed 's/: /:\n  /'
   echo "Nameservers:"
   echo "$NS"
+  echo "$MX"
 } >> "$DPATH/$DOMAIN.out"
 
 rm "$DPATH/$DOMAIN.whois"
