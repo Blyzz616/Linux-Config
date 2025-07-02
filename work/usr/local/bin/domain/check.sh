@@ -84,7 +84,7 @@ MX=$(dig "${DNAME}.${DTLD}" MX | grep -E '\sMX\s' | awk '{print "  " $NF}' | sed
   echo "Nameservers:"
   echo "$NS"
   echo "$MX"
-} >> "$DPATH/$DOMAIN.out"
+} > "$DPATH/$DOMAIN.out"
 
 rm "$DPATH/$DOMAIN.whois"
 
