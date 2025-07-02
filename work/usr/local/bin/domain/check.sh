@@ -67,7 +67,7 @@ if [[ "$DTLD" == "]"* ]]; then
   DTLD=$(echo $DTLD | cut -c2-)
 fi
 
-echo "Domain: ${DNAME}""[.]""${DTLD}" >> "$DPATH/${DOMAIN}.out"
+echo "Domain: ${DNAME}""[.]""${DTLD}" > "$DPATH/${DOMAIN}.out"
 
 NS=$(dig "${DNAME}.${DTLD}" NS | grep -E '\sNS\s' | awk '{print "  " $NF}' | sed 's/.$//')
 MX=$(dig "${DNAME}.${DTLD}" MX | grep -E '\sMX\s' | awk '{print "  " $NF}' | sed 's/.$//')
@@ -83,7 +83,7 @@ MX=$(dig "${DNAME}.${DTLD}" MX | grep -E '\sMX\s' | awk '{print "  " $NF}' | sed
     | sed 's/: /:\n  /'
   [[ -n $NS ]] && echo -e "Nameservers:\n$NS"
   [[ -n $MX ]] && echo -e "Mailservers:\n$MX"
-} > "$DPATH/$DOMAIN.out"
+} >> "$DPATH/$DOMAIN.out"
 
 rm "$DPATH/$DOMAIN.whois"
 
