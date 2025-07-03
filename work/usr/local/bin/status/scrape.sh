@@ -1,11 +1,20 @@
 #!/bin/bash
 
+INPUT="$*"
+
 SPATH=/usr/local/bin/status
 
+VER(){
+  VNUM=$(<$SPATH/scrape.ver)
+  echo -e " Current version: $VNUM"
+}
+
+START(){
 # Clear old file
-STAMP=$(date +"%a, %b %d, %Y - %R")
-echo $STAMP > $SPATH/status.txt
-echo -e "  \033[0;90m..:: $STAMP ::..\033[0m"
+  STAMP=$(date +"%a, %b %d, %Y - %R")
+  echo $STAMP > $SPATH/status.txt
+  echo -e "  \033[0;90m..:: $STAMP ::..\033[0m"
+}
 
 ITGFUNCTION (){
   # set good status
@@ -113,7 +122,13 @@ DUOFUNCTION () {
   echo $DUS >> $SPATH/status.txt && rm $SPATH/duo.out
 }
 
+if [[ $INPUT == "-v" ]]; then
+  VER
+  exit 0
+fi
+
 # Run some functions
+START
 ITGFUNCTION
 MCTFUNCTION
 AXFUNCTION
