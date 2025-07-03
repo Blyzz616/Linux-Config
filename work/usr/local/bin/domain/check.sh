@@ -13,9 +13,9 @@ echo -e "  \e[1mNAME\n\n
   \e[1mDESCRIPTION\n
       \e[0mDisplay the Registration date and last update of the domain from 
       whois.com as well as Nameserver and Mailserver information from dig.\n
-      \e[1m-h\e[0m, --help
+      \e[1m-h\e[0m, \e[1m--help\e[0m
             displays this help and exit\n
-      \e[1m-v\e[0m, --version
+      \e[1m-v\e[0m, \e[1m--version\e[0m
             output version information and exit\n\n
   \e[1mEXAMPLES\n
       \e[0mShow the information for blyzz.com\n
