@@ -1,15 +1,56 @@
 #!/bin/bash
 
 INPUT="$*"
-[[ -z $1 ]] && echo -e "\n  Usage: domain [OPTION]...\n  Where: [OPTION] is a domain name - example: blyzz.com\nExample: domain blyzz.com\n" && exit 1
+UPDATE="July 2025"
+ARGS(){
+echo -e "  NAME\n\n
+      domain - print pertinent information about a domain name for phishing
+      investivgation.\n\n
+  SYNOPSIS\n
+      domain [OPTION]
+      domain [-h|--help]
+      domain [-v|--version]\n\n
+  DESCRIPTION\n
+      Display the Registration date and last update of the domain from 
+      whois.com as well as Nameserver and Mailserver information from dig.\n
+      -h, --help
+            displays this help and exit\n
+      -v, --version
+            output version information and exit\n\n
+  EXAMPLES\n
+      Show the information for blyzz.com\n
+            $ domain blyzz.com\n
+      It will also eliminate the '[' and ']' brackets as they are often
+      copied to the clipbaord\n
+            $ domain blyzz[.]com\n
+      You can even copy an email address\n
+            $ domain jim@blyzz.com\n\n
+  AUTHOR\n
+      Written by Jim Sher.\n\n
+  COPYRIGHT\n
+      Copyright © 2025 Free Software Foundation, Inc.  License GPLv3+:
+      GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+      This is free software: you are free to change and redistribute it.
+      There is NO WARRANTY, to the extent permitted by law\n\n.
+  $UPDATE\n"
+exit 0
+}
+
+VER(){
+  VNUM=$(</usr/local/bin/domain/check.ver)
+  echo -e " Current version: $VNUM
+  $UPDATE\n"
+}
 
 # Strip brackets if present
-if [[ "$INPUT" =~ [\<\[]([^>\]]+)[\>\]] ]]; then
+STRIP(){
+  if [[ "$INPUT" =~ [\<\[]([^>\]]+)[\>\]] ]]; then
     INPUT="${BASH_REMATCH[1]}"
-fi
+  fi
+}
 
 # Function to extract domain components: DNAME, DTLD, DOMAIN
-extract_domain_parts() {
+BREAKDOWN() {
     local full="$1"
 
     # Clean URL to just the domain part
@@ -51,8 +92,17 @@ extract_domain_parts() {
     DOMAIN="${DNAME}.${DTLD}"
 }
 
-# Run domain extraction
-extract_domain_parts "$INPUT"
+if [[ $INPUT =~ -v|--version ]]; then
+  VER
+  exit 0
+fi
+
+[[ -z $1 ]] && echo -e "\n  Usage: domain [OPTION]...\n  Where: [OPTION] is a domain name - example: blyzz.com\nExample: domain blyzz.com\n" && exit 1
+[[ $INPUT =~ ^-h$|^--help$ ]] && ARGS
+[[ $INPUT =~ ^-v$|^--version$ ]] && ARGS
+
+STRIP
+BREAKDOWN "$INPUT"
 
 DPATH="/usr/local/bin/domain"
 mkdir -p "$DPATH"
