@@ -7,24 +7,24 @@ echo -e "  \e[1mNAME\n\n
       \e[0mdomain - print pertinent information about a domain name for phishing
       investivgation.\n\n
   \e[1mSYNOPSIS\n
-      \e[0mdomain [OPTION]
-      domain [-h|--help]
-      domain [-v|--version]\n\n
+      \e[1mdomain\e[0m [\e[4mOPTION\e[0m]
+      \e[1mdomain\e[0m [-h|--help]
+      \e[1mdomain\e[0m [-v|--version]\n\n
   \e[1mDESCRIPTION\n
       \e[0mDisplay the Registration date and last update of the domain from 
       whois.com as well as Nameserver and Mailserver information from dig.\n
-      -h, --help
+      \e[1m-h\e[0m, --help
             displays this help and exit\n
-      -v, --version
+      \e[1m-v\e[0m, --version
             output version information and exit\n\n
   \e[1mEXAMPLES\n
       \e[0mShow the information for blyzz.com\n
-            $ domain blyzz.com\n
+            $ \e[1mdomain \e[0mblyzz.com\n
       It will also eliminate the '[' and ']' brackets as they are often
       copied to the clipbaord\n
-            $ domain blyzz[.]com\n
+            $ \e[1mdomain \e[0mblyzz[.]com\n
       You can even copy an email address\n
-            $ domain jim@blyzz.com\n\n
+            $ \e[1mdomain \e[0mjim@blyzz.com\n\n
   \e[1mAUTHOR\n
       \e[0mWritten by Jim Sher.\n\n
   \e[1mCOPYRIGHT\n
