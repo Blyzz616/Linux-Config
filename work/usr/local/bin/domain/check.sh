@@ -3,32 +3,32 @@
 INPUT="$*"
 UPDATE="July 2025"
 ARGS(){
-echo -e "  NAME\n\n
-      domain - print pertinent information about a domain name for phishing
+echo -e "  \e[1mNAME\n\n
+      \e[0mdomain - print pertinent information about a domain name for phishing
       investivgation.\n\n
-  SYNOPSIS\n
-      domain [OPTION]
+  \e[1mSYNOPSIS\n
+      \e[0mdomain [OPTION]
       domain [-h|--help]
       domain [-v|--version]\n\n
-  DESCRIPTION\n
-      Display the Registration date and last update of the domain from 
+  \e[1mDESCRIPTION\n
+      \e[0mDisplay the Registration date and last update of the domain from 
       whois.com as well as Nameserver and Mailserver information from dig.\n
       -h, --help
             displays this help and exit\n
       -v, --version
             output version information and exit\n\n
-  EXAMPLES\n
-      Show the information for blyzz.com\n
+  \e[1mEXAMPLES\n
+      \e[0mShow the information for blyzz.com\n
             $ domain blyzz.com\n
       It will also eliminate the '[' and ']' brackets as they are often
       copied to the clipbaord\n
             $ domain blyzz[.]com\n
       You can even copy an email address\n
             $ domain jim@blyzz.com\n\n
-  AUTHOR\n
-      Written by Jim Sher.\n\n
-  COPYRIGHT\n
-      Copyright © 2025 Free Software Foundation, Inc.  License GPLv3+:
+  \e[1mAUTHOR\n
+      \e[0mWritten by Jim Sher.\n\n
+  \e[1mCOPYRIGHT\n
+      \e[0mCopyright © 2025 Free Software Foundation, Inc.  License GPLv3+:
       GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
       This is free software: you are free to change and redistribute it.
       There is NO WARRANTY, to the extent permitted by law\n\n.
