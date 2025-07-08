@@ -101,6 +101,11 @@ fi
 [[ $INPUT =~ ^-h$|^--help$ ]] && ARGS
 [[ $INPUT =~ ^-v$|^--version$ ]] && ARGS
 
+if [[ $INPUT =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9\.]+$ ]]; then
+  FORMATGOOD=1
+  SENDERNAME=$(echo $INPUT | awk -F@ '{print $1}')
+fi
+
 STRIP
 BREAKDOWN "$INPUT"
 
@@ -117,7 +122,13 @@ if [[ "$DTLD" == "]"* ]]; then
   DTLD=$(echo $DTLD | cut -c2-)
 fi
 
-echo "Domain: ${DNAME}""[.]""${DTLD}" > "$DPATH/${DOMAIN}.out"
+if [[ $FORMATGOOD -eq 1 ]]
+  echo -e "Sender: ${SENDERNAME}@${DNAME}[.]${DTLD}\nSubject: \n"
+else
+  echo -e "Sender: \nSubject: \n"
+fi
+
+  echo "Domain: ${DNAME}""[.]""${DTLD}" > "$DPATH/${DOMAIN}.out"
 
 NS=$(dig "${DNAME}.${DTLD}" NS | grep -E '\sNS\s' | awk '{print "  " $NF}' | sed 's/.$//')
 MX=$(dig "${DNAME}.${DTLD}" MX | grep -E '\sMX\s' | awk '{print "  " $NF}' | sed 's/.$//')
