@@ -38,8 +38,7 @@ exit 0
 
 VER(){
   VNUM=$(</usr/local/bin/domain/check.ver)
-  echo -e " Current version: $VNUM
-  $UPDATE\n"
+  echo -e "\n  Current version: $VNUM\n      $UPDATE\n"
 }
 
 # Strip brackets if present
