@@ -122,7 +122,7 @@ if [[ "$DTLD" == "]"* ]]; then
   DTLD=$(echo $DTLD | cut -c2-)
 fi
 
-if [[ $FORMATGOOD -eq 1 ]]
+if [[ $FORMATGOOD -eq 1 ]]; then
   echo -e "Sender: ${SENDERNAME}@${DNAME}[.]${DTLD}\nSubject: \n"
 else
   echo -e "Sender: \nSubject: \n"
