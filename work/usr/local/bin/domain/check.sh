@@ -100,7 +100,7 @@ fi
 [[ $INPUT =~ ^-h$|^--help$ ]] && ARGS
 [[ $INPUT =~ ^-v$|^--version$ ]] && ARGS
 
-if [[ $INPUT =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9\.]+$ ]]; then
+if [[ $INPUT =~ ^[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+$ ]]; then
   FORMATGOOD=1
   SENDERNAME=$(echo $INPUT | awk -F@ '{print $1}')
 fi
