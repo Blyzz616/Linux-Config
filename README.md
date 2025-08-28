@@ -1,7 +1,10 @@
 I guess I just got tired of re-configuring my linux distros each time I installed a new one from scratch.   
 [(copy and paste code below)](https://github.com/Blyzz616/Linux-Config/blob/main/README.md#bash_profile)
 
-## .nanorc
+
+# What this code block does:
+
+## create .nanorc
 
 > set constantshow
 
@@ -15,7 +18,7 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 - Set the color of the line numbers to cyan text on a black background
 
-## .screenrc
+## create .screenrc
 
 > hardstatus on
 
@@ -44,7 +47,7 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 - Disable the startup message when screen starts
 
-## .bashrc
+## create .bashrc
 
 ### Interactive Shell Check
 
