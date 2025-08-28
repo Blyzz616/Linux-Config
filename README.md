@@ -313,7 +313,7 @@ alias ll='ls -l'
 alias la='ls -la'
 alias lh='ls -lah'
 alias cd..='cd ..'
-alias go='apt update -y && apt upgrade -y && apt dist-upgreade && apt full upgrade'
+alias go='apt update -y && apt upgrade -y && apt dist-upgrade && apt full-upgrade'
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
