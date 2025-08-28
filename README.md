@@ -204,9 +204,10 @@ catta() {
 > alias ll='ls -l'  
 > alias la='ls -la'  
 > alias lh='ls -lah'  
-> alias cd..='cd ..'  
+> alias cd..='cd ..'
+> alias go='apt update -y && apt upgrade -y && apt dist-upgrade && apt full-upgrade'
 
-- Sets up aliases for common ls commands and a cd shortcut.
+- Sets up aliases for common ls commands and a cd shortcut for a common typo I make as wlel as using `go` to do all the updates it can.
 
 ### Load Additional Aliases
 
