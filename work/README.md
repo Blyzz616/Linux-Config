@@ -30,4 +30,4 @@ Handled automatically
 
 ## Known Bugs
 
-If nothing comes up in the domain check for Registration Date or Last Updated, You may need to open (Whois)[https://whois.com/whois/example.com] to get around the captcha.
+If nothing comes up in the domain check for Registration Date or Last Updated, You may need to open [Whois](https://whois.com/whois/example.com) to get around the captcha.
