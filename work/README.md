@@ -2,13 +2,13 @@
 
 ## Setup
 
-Install WSL (Debian)
+- Install WSL (Debian)
 
-Copy the folders under `/usr/` to their locations
+- Copy the folders under `/usr/` to their locations
 
-copy `.bashrc`, `.nanorc`, `.screenrc` to your `/home/<usr>/` directory
+- copy `.bashrc`, `.nanorc`, `.screenrc` to your `/home/<usr>/` directory
 
-Log out and back in again
+- Log out and back in again
 
 ## Usage
 
