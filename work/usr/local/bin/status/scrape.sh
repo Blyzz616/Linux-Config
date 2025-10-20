@@ -16,25 +16,25 @@ START(){
   echo -e "  \033[0;90m..:: $STAMP ::..\033[0m"
 }
 
-ITGFUNCTION (){
-  # set good status
-  ITGU="All Systems Operational"
-  ## get the status file
-  wget -qO $SPATH/itg.out https://status.itglue.com/
-  ## Add Header
-ITGH="
-  \033[0;94mIT Glue:\033[0m"
-echo $ITGH >> $SPATH/status.txt
-echo -e "$ITGH"
-  ## get actual status put in status file
-  ITGS=$(grep -EA3 'class="page-status' $SPATH/itg.out | grep -vE '^\s+<' | cut -c13-)
-  echo $ITGS >> $SPATH/status.txt && rm $SPATH/itg.out
-  if [[ "$ITGU" = "$ITGS" ]]; then
-    echo "    ✅  $ITGS"
-  else
-    echo "    ❌  $ITGS"
-  fi
-}
+# ITGFUNCTION (){
+#   # set good status
+#   ITGU="All Systems Operational"
+#   ## get the status file
+#   wget -qO $SPATH/itg.out https://status.itglue.com/
+#   ## Add Header
+# ITGH="
+#   \033[0;94mIT Glue:\033[0m"
+# echo $ITGH >> $SPATH/status.txt
+# echo -e "$ITGH"
+#   ## get actual status put in status file
+#   ITGS=$(grep -EA3 'class="page-status' $SPATH/itg.out | grep -vE '^\s+<' | cut -c13-)
+#   echo $ITGS >> $SPATH/status.txt && rm $SPATH/itg.out
+#   if [[ "$ITGU" = "$ITGS" ]]; then
+#     echo "    ✅  $ITGS"
+#   else
+#     echo "    ❌  $ITGS"
+#   fi
+# }
 
 MCTFUNCTION () {
   # Mimecast
@@ -129,7 +129,7 @@ fi
 
 # Run some functions
 START
-ITGFUNCTION
+# ITGFUNCTION
 MCTFUNCTION
 AXFUNCTION
 #MSOFUHNCTION
