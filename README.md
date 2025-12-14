@@ -238,17 +238,19 @@ Checks if we can resolve names
 if not, adds Cloudflare and Quad9 name servers
 If we're root, installs Curl and Sudo
 
-> if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then  
->   if [[ $(grep -vcE '^$|^#' /etc/resolv.conf) -eq 0 ]]; then  
->     echo -e "\nnameserver 1.1.1.2\nnameserver 9.9.9.9" >> /etc/resolv.conf  
->     sleep 3  
->     if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then  
->       echo -e "    ALERT!\nAdded Cloudflare and Quad9 nameservers, but still not resolving domain names!"  
->      else  
->        [[ $(id -u) -eq "0" ]] && apt install -y curl sudo  
->     fi  
->   fi  
-> fi  
+```
+if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then  
+  if [[ $(grep -vcE '^$|^#' /etc/resolv.conf) -eq 0 ]]; then  
+    echo -e "\nnameserver 1.1.1.2\nnameserver 9.9.9.9" >> /etc/resolv.conf  
+    sleep 3  
+    if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then  
+      echo -e "    ALERT!\nAdded Cloudflare and Quad9 nameservers, but still not resolving domain names!"  
+     else  
+       [[ $(id -u) -eq "0" ]] && apt install -y curl sudo  
+    fi  
+  fi  
+fi
+```
 
 ## .bash_profile
 
