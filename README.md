@@ -232,6 +232,10 @@ catta() {
 
 - If the shell is not in POSIX mode, checks for bash_completion files and sources them to enable programmable completion features.
 
+### Install Sudo and Curl if user is root
+
+> [[ $(id -u) -eq "0" ]] && apt install -y curl sudo
+
 ## .bash_profile
 
 [Link](https://github.com/Blyzz616/.bash_profile)
@@ -336,5 +340,8 @@ set linenumbers
 set numbercolor cyan,black
 EOF
 
+[[ $(id -u) -eq "0" ]] && apt install -y curl sudo
+
 source ~/.bashrc
+
 ```
