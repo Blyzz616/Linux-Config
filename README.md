@@ -232,7 +232,7 @@ catta() {
 
 - If the shell is not in POSIX mode, checks for bash_completion files and sources them to enable programmable completion features.
 
-### Add Curl and Sudo
+### Add Curl and Sudo (sorry about the non-standard formatting - github was giving me grief)
 
 Checks if we can resolve names
 if not, adds Cloudflare and Quad9 name servers
