@@ -419,7 +419,7 @@ if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then
       echo -e "    ALERT!
 Added Cloudflare and Quad9 nameservers, but still not resolving domain names!"
      else
-       [[ $(id -u) -eq "0" ]] && apt install -y curl sudo
+       [[ $(id -u) -eq "0" ]] && apt update -y && apt upgrade -y && apt install -y curl sudo
     fi
   fi
 fi
