@@ -400,7 +400,7 @@ SETSTATIC() {
   echo -e "    address $IPADD\n    netmask $IPMASK\n    gateway $IPGATE" >> /etc/network/interfaces
 }
 
-if [[ $(whoami) = "jim" ]]; then
+if [[  $(id -u) -eq "0" ]]; then
   if grep -q dhcp /etc/network/interfaces; then
     GETINTERFACE
     GETIP
