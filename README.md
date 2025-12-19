@@ -388,7 +388,8 @@ GETGATE() {
 GETIP() {
   echo -e "  Current IP is: $(ip a | grep inet | gpre -vE 'host lo|inet6' | awk '{print $2}')"
   read -rp "
-  What should the IP be for this host? " IPADD
+  What should the IP be for this host?
+" IPADD
   if [[ ! $IPADD =~ ([0-9]+\.){3}[0-9]{1,3} ]]; then #I know, I know, this regex is utter drivel and needs to be improved.
     echo "Yeah, no, give me a valid IPv4 address (no netmask)."
     GETIP
