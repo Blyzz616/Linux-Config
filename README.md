@@ -356,6 +356,60 @@ set linenumbers
 set numbercolor cyan,black
 EOF
 
+INTERFACE=""
+IPADD=""
+IPMASK=""
+IPGATE=""
+
+GETINTERFACE() {
+  INTERFACE=$(cat /etc/network/interfaces | grep -E '^iface.*static$' | awk '{print $2}')
+}
+
+GETMASK() {
+  read -p "
+  What should the netmask be (IP address, not CIDR)?
+" IPMASK
+  if [[ ! $IPMASK =~ '([0-9]+\.){3}[0-9]{1,3}' ]]; then
+    echo "Please use x.x.x.x format to enter net mask."
+    GETMASK
+  fi
+}
+
+GETGATE() {
+  read -p "
+  What should the Gateway be?
+" IPGATE
+  if [[ ! $IPGATE =~ '([0-9]+\.){3}[0-9]{1,3}' ]]; then
+    echo "Please use x.x.x.x format to enter gateway address."
+    GETGATE
+  fi
+}
+
+GETIP() {
+  echo -e "  Current IP is: $(ip a | grep inet | gpre -vE 'host lo|inet6' | awk '{print $2}')"
+  read -p "
+  What should the IP be for this host?
+" IPADD
+  if [[ ! $IPADD =~ '([0-9]+\.){3}[0-9]{1,3}' ]]; then #I know, I know, this regex is utter drivel and needs to be improved.
+    echo "Yeah, no, give me a valid IPv4 address (no netmask)."
+    GETIP
+  fi
+}
+
+SETSTATIC() {
+  sed -i 's/iface $INTERFACE inet dhcp/iface $INTERFACE inet static/ /etc/network/interfaces
+  echo -e "    address $IPADD\n    netmask $IPMASK\n    gateway $IPGATE" >> /etc/network/interfaces
+}
+
+if [[ $(whoami) = "jim" ]]; then
+  if grep -q dhcp /etc/network/interfaces; then
+    GETINTERFACE
+    GETIP
+    GETMASK
+    GETGATE
+    SETSTATIC
+  fi
+
 if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then
   if [[ $(grep -vcE '^$|^#' /etc/resolv.conf) -eq 0 ]]; then
     echo -e "\nnameserver 1.1.1.2\nnameserver 9.9.9.9" >> /etc/resolv.conf
