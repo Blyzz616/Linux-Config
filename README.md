@@ -12,25 +12,35 @@ set constantshow
 
 - Always display the cursor position at the bottom of the editor
 
-> set linenumbers
+```bash
+set linenumbers
+```
 
 - Show line numbers on the left side of the editor
 
-> set numbercolor cyan,black
+```bash
+set numbercolor cyan,black
+```
 
 - Set the color of the line numbers to cyan text on a black background
 
 ## create .screenrc
 
-> hardstatus on
+```bash
+hardstatus on
+```
 
 - Turn on the hardstatus line
 
-> hardstatus alwaysfirstline
+```bash
+hardstatus alwaysfirstline
+```
 
 - Place the hardstatus line at the top of the screen
 
-> hardstatus string '%{= wk}Screen: %S %= [%c]'
+```bash
+hardstatus string '%{= wk}Screen: %S %= [%c]'
+```
 
 - Customize the hardstatus line format
 - %{= wk}    - Set text to white on black background
@@ -38,14 +48,21 @@ set constantshow
 - %=         - Push everything after this to the far right
 - [%c]       - Display current time in HH:MM format, surrounded by square brackets
 
-> defscrollback 10000
+```bash
+defscrollback 10000
+```
+
 - Set the scrollback buffer size to 10000 lines
 
-> defutf8 on
+```bash
+defutf8 on
+```
 
 - Enable UTF-8 support
 
-> startup_message off
+```bash
+startup_message off
+```
 
 - Disable the startup message when screen starts
 
@@ -53,10 +70,12 @@ set constantshow
 
 ### Interactive Shell Check
 
-> case $- in  
->     *i*) ;;  
->       *) return;;  
-> esac
+```bash
+case $- in  
+    *i*) ;;  
+      *) return;;  
+esac
+```
 
 - case $- in ... esac: This checks the current shell options.
 - *i*) ;;: If the shell is interactive (i is present in $-), do nothing (;;).
@@ -64,55 +83,69 @@ set constantshow
 
 ### History Control
 
-> HISTCONTROL=ignoreboth
+```bash
+HISTCONTROL=ignoreboth
+```
 
 - HISTCONTROL=ignoreboth: Sets the shell history to ignore duplicate entries and commands that start with a space.
 
 ### Append to History
 
-> shopt -s histappend
+```bash
+shopt -s histappend
+```
 
 - shopt -s histappend: Enables appending to the history file, rather than overwriting it.
 
 ### History Size
 
-> HISTSIZE=1000  
-> HISTFILESIZE=2000
+```bash
+HISTSIZE=1000  
+HISTFILESIZE=2000
+```
 
 - HISTSIZE=1000: Sets the number of commands to remember in the command history.
 - HISTFILESIZE=2000: Sets the maximum number of lines contained in the history file.
 
 ### Check Window Size
 
-> shopt -s checkwinsize
+```bash
+shopt -s checkwinsize
+```
 
 - shopt -s checkwinsize: After each command, checks the window size and updates LINES and COLUMNS if necessary.
 
 ### Debian Chroot
 
-> if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then  
->     debian_chroot=$(cat /etc/debian_chroot)  
-> fi
+```bash
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then  
+    debian_chroot=$(cat /etc/debian_chroot)  
+fi
+```
 
 - Checks if the debian_chroot variable is unset or empty and if /etc/debian_chroot is readable.
 - If both conditions are met, it sets debian_chroot to the contents of /etc/debian_chroot.
 
 ### Terminal Color Check
 
-> case "$TERM" in  
->     xterm-color|*-256color) color_prompt=yes;;  
-> esac
+```bash
+case "$TERM" in  
+    xterm-color|*-256color) color_prompt=yes;;  
+esac
+```
 
 - Checks if the terminal supports color (xterm-color or *-256color).
 - If so, sets color_prompt=yes.
 
 ### Color Prompt Setup
 
-> if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then  
->     color_prompt=yes  
-> else  
->     color_prompt=  
-> fi  
+```bash
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then  
+    color_prompt=yes  
+else  
+    color_prompt=  
+fi  
+```
 
 - Checks directly whether tput exists and can set terminal colors.
 - If so, sets color_prompt=yes, otherwise sets it empty.
