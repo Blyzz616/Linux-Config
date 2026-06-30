@@ -104,33 +104,25 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 - Checks if the terminal supports color (xterm-color or *-256color).
 - If so, sets color_prompt=yes.
 
-### Force Color Prompt
-
-> force_color_prompt=yes
-
-- Forces the color prompt to be enabled.
-
 ### Color Prompt Setup
 
-> if [ -n "$force_color_prompt" ]; then  
->     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then  
->         color_prompt=yes  
->     else  
->         color_prompt=  
->     fi  
-> fi
+> if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then  
+>     color_prompt=yes  
+> else  
+>     color_prompt=  
+> fi  
 
-- Checks if force_color_prompt is set.
-- If tput exists and can set terminal colors, it sets color_prompt=yes.
-- Otherwise, it sets color_prompt to empty.
+- Checks directly whether tput exists and can set terminal colors.
+- If so, sets color_prompt=yes, otherwise sets it empty.
+- (Dropped the old force_color_prompt variable — it was just an unconditional yes immediately followed by this same check, so it wasn't doing anything useful.)
 
 ### PS1 Prompt Definition
 
 > if [ "$color_prompt" = yes ]; then  
 >     if [ "$(id -u)" -eq 0 ]; then  
->         PS1='${debian_chroot:+($debian_chroot)}\[\033[5;31m\]\u\e[25m@\h\[\033[00m\]:\[\033[01;34m\]\w #\[\033[00m\] '  
+>         PS1='${debian_chroot:+($debian_chroot)}\[\033[5;31m\]\u\[\e[25m\]@\h\[\033[00m\]:\[\033[01;34m\]\w #\[\033[00m\] '  
 >     else  
->         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \\$\[\033[00m\] '  
+>         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '  
 >     fi  
 > else  
 >     if [ "$(id -u)" -eq 0 ]; then  
@@ -143,7 +135,7 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 - Sets the prompt (PS1) based on whether color_prompt is set.
 - If the user is root (id -u equals 0), the prompt ends with #, otherwise with $.
-- The colors are different for root (\033[01;31m for red) and non-root users (\033[01;32m for green).
+- The colors are different for root (red) and non-root users (green).
 
 ### Xterm Title
 
@@ -179,38 +171,33 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 - Defines the diffy function to compare two files, ignoring lines that start with a comment (#) or are empty.
 
-### Define catta Function (sorry about the non-standard formatting - github was giving me grief)
+### Define catta Function
 
 ```
 catta() {  
-    if [[ -n "$1" ]]; then
-        for texts in $(file "$1"* | grep text | awk '{print $1}' | sed 's/.$\//' ); do  
-            echo -e "\n\n\e[4m\e[93m${texts}\e[0m\n"  
-            cat "${texts}"  
-        done  
-    else  
-        for texts in $(file ./* | grep text | awk '{print $1}' | sed 's/.$\//' ); do  
-            echo -e "\n\n\e[4m\e[93m${texts}\e[0m\n"  
-            cat "$texts"  
-        done  
-    fi  
+    local target="${1:-./*}"  
+    while IFS= read -r texts; do  
+        echo -e "\n\n    \e[4m\e[93m${texts}\e[0m\n"  
+        cat "${texts}"  
+    done < <(file -- ${target}* 2>/dev/null | grep text | sed 's/:.*//')  
 }
 ```
 
 - Defines the catta function to display contents of text files.
-- If a file pattern is provided, it processes files matching the pattern.
-- Otherwise, it processes all text files in the current directory.
+- If a file pattern is provided, it processes files matching the pattern; otherwise it processes everything in the current directory.
 - Each file's name is highlighted and separated for readability.
+- Rewritten to use a `while read` loop to prevent globbing
 
 ### Define Aliases
 
 > alias ll='ls -l'  
 > alias la='ls -la'  
 > alias lh='ls -lah'  
-> alias cd..='cd ..'
-> alias go='apt update -y && apt upgrade -y && apt dist-upgrade && apt full-upgrade'
+> alias cd..='cd ..'  
+> alias update='apt update -y && apt upgrade -y && apt full-upgrade -y'
 
-- Sets up aliases for common ls commands and a cd shortcut for a common typo I make as wlel as using `go` to do all the updates it can.
+- Sets up aliases for common ls commands and a cd shortcut for a common typo I make.
+- `update` runs everything apt needs in one go. (Dropped the separate `dist-upgrade` call — on modern apt it's just an alias for `full-upgrade`, so running both back to back was redundant. Also renamed from `go` to `update` since it's clearer at a glance what it does.)
 
 ### Load Additional Aliases
 
@@ -232,25 +219,47 @@ catta() {
 
 - If the shell is not in POSIX mode, checks for bash_completion files and sources them to enable programmable completion features.
 
-### Add Curl and Sudo (sorry about the non-standard formatting - github was giving me grief)
+## Outside of .bashrc
 
-Checks if we can resolve names
-if not, adds Cloudflare and Quad9 name servers
-If we're root, installs Curl and Sudo
+### Static IP Assignment (currently disabled)
+
+- This whole block is commented out for now — I'm relying on DHCP reservations at the router instead of setting static IPs on the host itself.
+- Left the functions in place (commented) in case I want to switch back to static addressing later: `GETINTERFACE` detects DHCP interfaces in `/etc/network/interfaces` (and asks you to pick if there's more than one), `GETIP`/`GETMASK`/`GETGATE` prompt for and validate IPv4 addresses, and `SETSTATIC` backs up `/etc/network/interfaces` before rewriting the relevant interface to static.
+
+### Show MAC Address(es) for DHCP Reservation
+
+> echo -e "\n  MAC address(es) for DHCP reservation:\n"  
+> ip -o link show | awk -F': ' '{print $2}' | while read -r iface; do  
+>   [[ "$iface" == "lo" ]] && continue  
+>   mac=$(cat "/sys/class/net/$iface/address" 2>/dev/null)  
+>   [[ -n "$mac" ]] && echo "    $iface: $mac"  
+> done
+
+- Lists every network interface (skipping loopback) and prints its MAC address straight from `/sys/class/net/*/address`.
+- Since I'm doing reservations instead of static config now, this gives me what I actually need to copy into the router/DHCP server.
+
+### Add Curl and Sudo
+
+Checks if we can resolve names; if not, adds Cloudflare and Quad9 nameservers (backing up the original file first). If we're root, installs curl and sudo.
 
 ```
-if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then  
+if ! getent hosts www.google.com &>/dev/null; then  
   if [[ $(grep -vcE '^$|^#' /etc/resolv.conf) -eq 0 ]]; then  
+    cp /etc/resolv.conf /etc/resolv.conf.bak.$(date +%s) 2>/dev/null  
     echo -e "\nnameserver 1.1.1.2\nnameserver 9.9.9.9" >> /etc/resolv.conf  
     sleep 3  
-    if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then  
+    if ! getent hosts www.google.com &>/dev/null; then  
       echo -e "    ALERT!\nAdded Cloudflare and Quad9 nameservers, but still not resolving domain names!"  
-     else  
-       [[ $(id -u) -eq "0" ]] && apt install -y curl sudo  
+    else  
+      [[ $(id -u) -eq "0" ]] && apt update -y && apt upgrade -y && apt install -y curl sudo  
     fi  
   fi  
 fi
 ```
+
+- Switched the reachability check from `ping` to `getent hosts`, since it tests actual DNS resolution rather than ICMP reachability (some networks block ping but resolve fine, which was giving false alarms before).
+- Also fixed the regex that checks whether `/etc/resolv.conf` is effectively empty — it was `'^$^#'` (broken) and is now `'^$|^#'` (blank lines or comments).
+- Now backs up `/etc/resolv.conf` with a timestamp before appending nameservers, just in case.
 
 ## .bash_profile
 
@@ -275,13 +284,10 @@ fi
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
-force_color_prompt=yes
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    color_prompt=yes
+else
+    color_prompt=
 fi
 if [ "$color_prompt" = yes ]; then
     if [ "$(id -u)" -eq 0 ]; then
@@ -315,29 +321,17 @@ diffy() {
     diff -y -B <(grep -vE '^\s*#' "$1") <(grep -vE '^\s*#' "$2")
 }
 catta() {
-    if [[ -n "$1" ]]; then
-        for texts in $(file "$1"* | grep text | awk '{print $1}' | sed 's/.$//'); do
-            echo -e "
-
-    \e[4m\e[93m${texts}\e[0m
-"
-            cat "${texts}"
-       done
-    else
-        for texts in $(file ./* | grep text | awk '{print $1}' | sed 's/.$//'); do
-            echo -e "
-
-    \e[4m\e[93m${texts}\e[0m
-"
-           cat "$texts"
-       done
-    fi
+    local target="${1:-./*}"
+    while IFS= read -r texts; do
+        echo -e "\n\n    \e[4m\e[93m${texts}\e[0m\n"
+        cat "${texts}"
+    done < <(file -- ${target}* 2>/dev/null | grep text | sed 's/:.*//')
 }
 alias ll='ls -l'
 alias la='ls -la'
 alias lh='ls -lah'
 alias cd..='cd ..'
-alias update='apt update -y && apt upgrade -y && apt dist-upgrade && apt full-upgrade'
+alias update='apt update -y && apt upgrade -y && apt full-upgrade -y'
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -356,70 +350,101 @@ set linenumbers
 set numbercolor cyan,black
 EOF
 
-INTERFACE=""
-IPADD=""
-IPMASK=""
-IPGATE=""
+# --- Static IP assignment (disabled — using DHCP reservations instead) ---
+#
+# INTERFACE=""
+# IPADD=""
+# IPMASK=""
+# IPGATE=""
+#
+# OCTET='(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])'
+# IPV4_RE="^${OCTET}\.${OCTET}\.${OCTET}\.${OCTET}\$"
+#
+# GETINTERFACE() {
+#   mapfile -t IFACES < <(grep -E '^iface.*inet dhcp$' /etc/network/interfaces | awk '{print $2}')
+#   if [[ ${#IFACES[@]} -eq 0 ]]; then
+#     echo "No DHCP interfaces found in /etc/network/interfaces. Skipping static IP setup."
+#     return 1
+#   elif [[ ${#IFACES[@]} -gt 1 ]]; then
+#     echo "Multiple DHCP interfaces found: ${IFACES[*]}"
+#     read -rp "  Which interface do you want to make static? " INTERFACE
+#     if [[ ! " ${IFACES[*]} " =~ " ${INTERFACE} " ]]; then
+#       echo "Invalid selection."
+#       return 1
+#     fi
+#   else
+#     INTERFACE="${IFACES[0]}"
+#   fi
+#   return 0
+# }
+#
+# GETMASK() {
+#   read -rp "
+#   What should the netmask be (IP address, not CIDR)?
+# " IPMASK
+#   if [[ ! $IPMASK =~ $IPV4_RE ]]; then
+#     echo "Please use a valid x.x.x.x netmask."
+#     GETMASK
+#   fi
+# }
+#
+# GETGATE() {
+#   read -rp "
+#   What should the Gateway be?
+# " IPGATE
+#   if [[ ! $IPGATE =~ $IPV4_RE ]]; then
+#     echo "Please use a valid x.x.x.x gateway address."
+#     GETGATE
+#   fi
+# }
+#
+# GETIP() {
+#   echo -e "  Current IP is: $(ip a | grep inet | grep -vE 'host lo|inet6' | awk '{print $2}')"
+#   read -rp "
+#   What should the IP be for this host?
+# " IPADD
+#   if [[ ! $IPADD =~ $IPV4_RE ]]; then
+#     echo "Please give a valid IPv4 address (no netmask)."
+#     GETIP
+#   fi
+# }
+#
+# SETSTATIC() {
+#   cp /etc/network/interfaces /etc/network/interfaces.bak.$(date +%s)
+#   sed -i "s/iface $INTERFACE inet dhcp/iface $INTERFACE inet static/" /etc/network/interfaces
+#   echo -e "    address $IPADD\n    netmask $IPMASK\n    gateway $IPGATE" >> /etc/network/interfaces
+# }
+#
+# if [[ $(id -u) -eq 0 ]]; then
+#   if grep -q dhcp /etc/network/interfaces; then
+#     if GETINTERFACE; then
+#       GETIP
+#       GETMASK
+#       GETGATE
+#       SETSTATIC
+#     fi
+#   fi
+# fi
 
-GETINTERFACE() {
-  INTERFACE=$(cat /etc/network/interfaces | grep -E '^iface.*dhcp$' | awk '{print $2}')
-}
+# --- Show MAC address(es) for DHCP reservation ---
+echo -e "\n  MAC address(es) for DHCP reservation:\n"
+ip -o link show | awk -F': ' '{print $2}' | while read -r iface; do
+  [[ "$iface" == "lo" ]] && continue
+  mac=$(cat "/sys/class/net/$iface/address" 2>/dev/null)
+  [[ -n "$mac" ]] && echo "    $iface: $mac"
+done
+echo ""
 
-GETMASK() {
-  read -rp "
-  What should the netmask be (IP address, not CIDR)?
-" IPMASK
-  if [[ ! $IPMASK =~ ([0-9]+\.){3}[0-9]{1,3} ]]; then
-    echo "Please use x.x.x.x format to enter net mask."
-    GETMASK
-  fi
-}
-
-GETGATE() {
-  read -rp "
-  What should the Gateway be?
-" IPGATE
-  if [[ ! $IPGATE =~ ([0-9]+\.){3}[0-9]{1,3} ]]; then
-    echo "Please use x.x.x.x format to enter gateway address."
-    GETGATE
-  fi
-}
-
-GETIP() {
-  echo -e "  Current IP is: $(ip a | grep inet | gpre -vE 'host lo|inet6' | awk '{print $2}')"
-  read -rp "
-  What should the IP be for this host?
-" IPADD
-  if [[ ! $IPADD =~ ([0-9]+\.){3}[0-9]{1,3} ]]; then #I know, I know, this regex is utter drivel and needs to be improved.
-    echo "Yeah, no, give me a valid IPv4 address (no netmask)."
-    GETIP
-  fi
-}
-
-SETSTATIC() {
-  sed -i "s/iface $INTERFACE inet dhcp/iface $INTERFACE inet static/" /etc/network/interfaces
-  echo -e "    address $IPADD\n    netmask $IPMASK\n    gateway $IPGATE" >> /etc/network/interfaces
-}
-
-if [[  $(id -u) -eq "0" ]]; then
-  if grep -q dhcp /etc/network/interfaces; then
-    GETINTERFACE
-    GETIP
-    GETMASK
-    GETGATE
-    SETSTATIC
-  fi
-fi 
-
-if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then
-  if [[ $(grep -vcE '^$^#' /etc/resolv.conf) -eq 0 ]]; then
+if ! getent hosts www.google.com &>/dev/null; then
+  if [[ $(grep -vcE '^$|^#' /etc/resolv.conf) -eq 0 ]]; then
+    cp /etc/resolv.conf /etc/resolv.conf.bak.$(date +%s) 2>/dev/null
     echo -e "\nnameserver 1.1.1.2\nnameserver 9.9.9.9" >> /etc/resolv.conf
     sleep 3
-    if [[ $(ping -c1 -q www.google.com &>/dev/null; echo $?) -ne 0 ]]; then
+    if ! getent hosts www.google.com &>/dev/null; then
       echo -e "    ALERT!
 Added Cloudflare and Quad9 nameservers, but still not resolving domain names!"
-     else
-       [[ $(id -u) -eq "0" ]] && apt update -y && apt upgrade -y && apt install -y curl sudo
+    else
+      [[ $(id -u) -eq 0 ]] && apt update -y && apt upgrade -y && apt install -y curl sudo
     fi
   fi
 fi
