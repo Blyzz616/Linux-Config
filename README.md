@@ -179,25 +179,29 @@ unset color_prompt force_color_prompt
 
 ### Xterm Title
 
-> case "$TERM" in  
-> xterm*|rxvt*)  
->     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"  
->     ;;  
-> *)  
->     ;;  
-> esac  
+```bash
+case "$TERM" in  
+xterm*|rxvt*)  
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"  
+    ;;  
+*)  
+    ;;  
+esac  
+```
 
 - If the terminal is xterm or rxvt, sets the terminal title to user@host: dir.
 
 ### Enable Color Support for ls and Define Aliases
 
-> if [ -x /usr/bin/dircolors ]; then 
->     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)" 
->     alias ls='ls --color=auto' 
->     alias grep='grep --color=auto' 
->     alias fgrep='fgrep --color=auto' 
->     alias egrep='egrep --color=auto' 
-> fi 
+```bash
+if [ -x /usr/bin/dircolors ]; then 
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)" 
+    alias ls='ls --color=auto' 
+    alias grep='grep --color=auto' 
+    alias fgrep='fgrep --color=auto' 
+    alias egrep='egrep --color=auto' 
+fi 
+```
 
 - Checks if dircolors exists and is executable.
 - If ~/.dircolors is readable, evaluates it for setting up color definitions.
@@ -205,15 +209,17 @@ unset color_prompt force_color_prompt
 
 ### Define diffy Function
 
-> diffy() {  
->     diff -y -B <(grep -vE '^\s*#' "$1") <(grep -vE '^\s*#' "$2")  
-> }  
+```bash
+diffy() {  
+    diff -y -B <(grep -vE '^\s*#' "$1") <(grep -vE '^\s*#' "$2")  
+}  
+```
 
 - Defines the diffy function to compare two files, ignoring lines that start with a comment (#) or are empty.
 
 ### Define catta Function
 
-```
+```bash
 catta() {  
     local target="${1:-./*}"  
     while IFS= read -r texts; do  
@@ -230,32 +236,38 @@ catta() {
 
 ### Define Aliases
 
-> alias ll='ls -l'  
-> alias la='ls -la'  
-> alias lh='ls -lah'  
-> alias cd..='cd ..'  
-> alias update='apt update -y && apt upgrade -y && apt full-upgrade -y'
+```bash
+alias ll='ls -l'  
+alias la='ls -la'  
+alias lh='ls -lah'  
+alias cd..='cd ..'  
+alias update='apt update -y && apt upgrade -y && apt full-upgrade -y'
+```
 
 - Sets up aliases for common ls commands and a cd shortcut for a common typo I make.
 - `update` runs everything apt needs in one go. (Dropped the separate `dist-upgrade` call — on modern apt it's just an alias for `full-upgrade`, so running both back to back was redundant. Also renamed from `go` to `update` since it's clearer at a glance what it does.)
 
 ### Load Additional Aliases
 
-> if [ -f ~/.bash_aliases ]; then  
->     . ~/.bash_aliases  
-> fi  
+```bash
+if [ -f ~/.bash_aliases ]; then  
+    . ~/.bash_aliases  
+fi  
+```
 
 - If ~/.bash_aliases exists, sources it to load additional aliases.
 
 ### Enable Programmable Completion
 
-> if ! shopt -oq posix; then  
->   if [ -f /usr/share/bash-completion/bash_completion ]; then  
->     . /usr/share/bash-completion/bash_completion  
->   elif [ -f /etc/bash_completion ]; then  
->     . /etc/bash_completion  
->   fi  
-> fi  
+```bash
+if ! shopt -oq posix; then  
+  if [ -f /usr/share/bash-completion/bash_completion ]; then  
+    . /usr/share/bash-completion/bash_completion  
+  elif [ -f /etc/bash_completion ]; then  
+    . /etc/bash_completion  
+  fi  
+fi  
+```
 
 - If the shell is not in POSIX mode, checks for bash_completion files and sources them to enable programmable completion features.
 
@@ -268,12 +280,14 @@ catta() {
 
 ### Show MAC Address(es) for DHCP Reservation
 
-> echo -e "\n  MAC address(es) for DHCP reservation:\n"  
-> ip -o link show | awk -F': ' '{print $2}' | while read -r iface; do  
->   [[ "$iface" == "lo" ]] && continue  
->   mac=$(cat "/sys/class/net/$iface/address" 2>/dev/null)  
->   [[ -n "$mac" ]] && echo "    $iface: $mac"  
-> done
+```bash
+echo -e "\n  MAC address(es) for DHCP reservation:\n"  
+ip -o link show | awk -F': ' '{print $2}' | while read -r iface; do  
+  [[ "$iface" == "lo" ]] && continue  
+  mac=$(cat "/sys/class/net/$iface/address" 2>/dev/null)  
+  [[ -n "$mac" ]] && echo "    $iface: $mac"  
+done
+```
 
 - Lists every network interface (skipping loopback) and prints its MAC address straight from `/sys/class/net/*/address`.
 - Since I'm doing reservations instead of static config now, this gives me what I actually need to copy into the router/DHCP server.
@@ -282,7 +296,7 @@ catta() {
 
 Checks if we can resolve names; if not, adds Cloudflare and Quad9 nameservers (backing up the original file first). If we're root, installs curl and sudo.
 
-```
+```bash
 if ! getent hosts www.google.com &>/dev/null; then  
   if [[ $(grep -vcE '^$|^#' /etc/resolv.conf) -eq 0 ]]; then  
     cp /etc/resolv.conf /etc/resolv.conf.bak.$(date +%s) 2>/dev/null  
