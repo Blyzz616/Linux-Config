@@ -118,21 +118,26 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 ### PS1 Prompt Definition
 
-> if [ "$color_prompt" = yes ]; then  
->     if [ "$(id -u)" -eq 0 ]; then  
->         PS1='${debian_chroot:+($debian_chroot)}\[\033[5;31m\]\u\[\e[25m\]@\h\[\033[00m\]:\[\033[01;34m\]\w #\[\033[00m\] '  
->     else  
->         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '  
->     fi  
-> else  
->     if [ "$(id -u)" -eq 0 ]; then  
->         PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w # '  
->     else  
->         PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w \$ '  
->     fi  
-> fi  
-> unset color_prompt force_color_prompt  
+```bash
+if [ "$color_prompt" = yes ]; then
+    if [ "$(id -u)" -eq 0 ]; then
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[5;31m\]\u\[\e[25m\]@\h\[\033[00m\]:\[\033[01;34m\]\w #\[\033[00m\] '
+    else
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
+    fi
+else
+    if [ "$(id -u)" -eq 0 ]; then
+        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w # '
+    else
+        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w \$ '
+    fi
+fi
+unset color_prompt force_color_prompt
+```
 
+- Sets the prompt (PS1) based on whether color_prompt is set.
+- If the user is root (id -u equals 0), the prompt ends with #, otherwise with $.
+- The colors are different for root (red) and non-root users (green).
 - Sets the prompt (PS1) based on whether color_prompt is set.
 - If the user is root (id -u equals 0), the prompt ends with #, otherwise with $.
 - The colors are different for root (red) and non-root users (green).
