@@ -6,7 +6,9 @@ I guess I just got tired of re-configuring my linux distros each time I installe
 
 ## create .nanorc
 
-> set constantshow
+```bash
+set constantshow
+```
 
 - Always display the cursor position at the bottom of the editor
 
